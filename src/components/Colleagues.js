@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./styles.css";
 import { Input, Card, Dropdown } from "semantic-ui-react";
+import { Modal } from "react-bootstrap";
 import axios from "axios";
 
 import gitHub from "../images/github.png";
@@ -10,10 +11,12 @@ import twitter from "../images/twitter.png";
 
 const Colleagues = () => {
     const [colleagues, setColleagues] = useState([]);
+    const [currentColleague, setCurrentColleague] = useState(0);
     const [filtered, setFiltered] = useState([]);
     const [search, setSearch] = useState("");
     const [office, setOffice] = useState("All offices");
     const [socialMedia, setSocialMedia] = useState("All social media");
+    const [showModal, setShowModal] = useState(false);
 
     useEffect( () => {
         // fetch all colleagues by making API call
@@ -24,7 +27,7 @@ const Colleagues = () => {
             });
     }, []);
 
-    function filter(newFilter, newValue) {
+    const filter = (newFilter, newValue) => {
         // filter colleagues on provided filters
         let filterName = search;
         let filterOffice = office;
@@ -158,11 +161,19 @@ const Colleagues = () => {
         </>
     );
 
+    const clickCard = (index) => {
+        setCurrentColleague(index);
+        setShowModal(true);
+    }
+
     const renderColleagues = () => (
         // render all colleagues as cards
         <Card.Group style={{marginTop: "2%"}}>
-            { filtered.map(colleague => (
-                <Card className="card">
+            { filtered.map((colleague, index) => (
+                <Card
+                    className="card"
+                    onClick={event => {event.preventDefault(); clickCard(index)}}
+                >
                     <Card.Content>
                         <div className="image-container">
                             <img src={colleague.imagePortraitUrl} className="image" alt="Colleague photograph" />
@@ -203,14 +214,66 @@ const Colleagues = () => {
         </Card.Group>
     );
 
-    return (
-        <div className="page-container">
-            <div className="header">
-                The fellowship of the tretton37
+    const colleagueInformation = (
+        (filtered && filtered.length > 0) &&
+        <Modal
+            show={showModal}
+            className="modal"
+            onHide={() => setShowModal(false)}
+            onClick={() => setShowModal(false)}
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+        >
+            <div className="modal-text">
+                <div className="colleague-header">
+                    { filtered[currentColleague].name }
+                </div>
+                <div className="modal-symbols">
+                    { filtered[currentColleague].linkedIn &&
+                        <a href={`https://linkedin.com${filtered[currentColleague].linkedIn}`} target="_blank" rel="noopener noreferrer">
+                            <img src={linkedIn} className="modal-symbol" alt="LinkedIn" />
+                        </a>
+                    }
+                    { filtered[currentColleague].gitHub &&
+                        <a href={`https://github.com/${filtered[currentColleague].gitHub}`} target="_blank" rel="noopener noreferrer">
+                            <img src={gitHub} className="modal-symbol" alt="GitHub" />
+                        </a>
+                    }
+                    { filtered[currentColleague].twitter &&
+                        <a href={`https://twitter.com/${filtered[currentColleague].twitter}`} target="_blank" rel="noopener noreferrer">
+                            <img src={twitter} className="modal-symbol" alt="Twitter" />
+                        </a>
+                    }
+                    { filtered[currentColleague].stackOverflow &&
+                        <a href={`https://stackoverflow.com/users/${filtered[currentColleague].stackOverflow}`} target="_blank" rel="noopener noreferrer">
+                            <img src={stackOverflow} className="modal-symbol" alt="StackOverflow" />
+                        </a>
+                    }
+                </div>
+                <div 
+                    className="colleague-text" 
+                    dangerouslySetInnerHTML={{
+                        __html: filtered[currentColleague].mainText
+                    }}
+                />
             </div>
-            { renderFilters() }
-            { renderColleagues() }
-        </div>
+            <div className="modal-photo">
+                <img src={filtered[currentColleague].imageBodyUrl} alt="Large colleague photograph" />
+            </div>
+        </Modal>
+    );
+
+    return (
+        <>
+            <div className="page-container">
+                <div className="header">
+                    The fellowship of the tretton37
+                </div>
+                { renderFilters() }
+                { renderColleagues() }
+                { colleagueInformation }
+            </div>
+        </>
     );
 };
 
