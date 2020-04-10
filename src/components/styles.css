@@ -38,3 +38,13 @@
     font-size: 0.9em;
     margin-top: 5%;
 }
+
+.card-symbols {
+    width: 100%;
+    display: inline-block;
+}
+
+.card-symbol {
+    width: 12.5%;
+    margin-right: 5%;
+}
