@@ -5,7 +5,7 @@
     background-color: #f7f7f7;
     display: flex;
     flex-direction: column;
-    padding: 2%;
+    padding: 30px;
 }
 
 .header {
@@ -47,4 +47,15 @@
 .card-symbol {
     width: 12.5%;
     margin-right: 5%;
+}
+
+.dropdown-filters {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 2%;
+}
+
+.text, .ui.input>input {
+    font-family: 'Baloo Paaji 2' !important;
 }
