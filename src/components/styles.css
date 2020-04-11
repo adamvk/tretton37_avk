@@ -87,6 +87,7 @@
 .card-symbols {
     width: 100%;
     display: inline-block;
+    margin-top: 2px;
 }
 
 .card-symbol {

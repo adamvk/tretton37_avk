@@ -13,6 +13,7 @@ import grid_active from "../images/grid_active.png";
 import grid_inactive from "../images/grid_inactive.png";
 import row_active from "../images/row_active.png";
 import row_inactive from "../images/row_inactive.png";
+import newNinja_photo from "../images/newninja.jpg";
 
 const Colleagues = () => {
     const [colleagues, setColleagues] = useState([]);
@@ -31,17 +32,27 @@ const Colleagues = () => {
         // fetch all colleagues by making API call
         axios.get('https://api.tretton37.com/ninjas')
             .then( res => {
+                addNewNinja(res.data);
                 setColleagues(res.data);
                 setFiltered(res.data);
                 prepareSortedColleagues(res.data);
             });
     }, []);
 
-    const prepareSortedColleagues = (colleagueData) => {
+    const addNewNinja = (colleagueList) => {
+        const newNinja = {
+            "name": "NEW AWESOME NINJA",
+            "office": "Which office?",
+            "imagePortraitUrl": {newNinja_photo}
+        };
+        colleagueList.push(newNinja);
+    };
+
+    const prepareSortedColleagues = (colleagueList) => {
         // preparing sorted arrays for possible sorting by user
         var tempSortedNames = [];
         var tempSortedOffices = [];
-        colleagueData.forEach(colleague => {
+        colleagueList.forEach(colleague => {
             tempSortedNames.push(colleague.name);
             tempSortedOffices.push(colleague.office);
         });
@@ -71,6 +82,7 @@ const Colleagues = () => {
             tempFiltered = tempFiltered.filter(colleague =>
                 colleague[`${filterSocialMedia}`]
             );
+        setSorting("");
         setFiltered(tempFiltered);
         prepareSortedColleagues(tempFiltered);
     };
@@ -184,25 +196,25 @@ const Colleagues = () => {
             key: 'Name',
             text: 'Name',
             value: 'name_atoz',
-            icon: 'angle down'
+            icon: 'sort alphabet ascending'
         },
         {
             key: 'Name',
             text: 'Name',
             value: 'name_ztoa',
-            icon: 'angle up'
+            icon: 'sort alphabet descending'
         },
         {
             key: 'Office',
             text: 'Office',
             value: 'office_atoz',
-            icon: 'angle down'
+            icon: 'sort alphabet ascending'
         },
         {
             key: 'Office',
             text: 'Office',
             value: 'office_ztoa',
-            icon: 'angle up'
+            icon: 'sort alphabet descending'
         },
     ];
 
@@ -303,11 +315,15 @@ const Colleagues = () => {
                 { filtered.map((colleague, index) => (
                     <Card
                         className="card"
-                        onClick={() => clickCard(index)}
+                        onClick={() => colleague.name.startsWith("NEW") ? window.open("https://tretton37.com/join") : clickCard(index)}
                     >
                         <Card.Content>
                             <div className="image-container">
-                                <img src={colleague.imagePortraitUrl} className="image" alt="Colleague photograph" />
+                                <img 
+                                    src={colleague.name.startsWith("NEW") ? newNinja_photo : colleague.imagePortraitUrl} 
+                                    className="image" 
+                                    alt="Colleague photograph" 
+                                />
                             </div>
                             <div className="card-text">
                                 <div>
@@ -328,7 +344,12 @@ const Colleagues = () => {
                     <List.Item
                         onClick={() => clickCard(index)}
                     >
-                        <Image avatar src={colleague.imagePortraitUrl} className="image-small" alt="Colleague photograph" />
+                        <Image 
+                            avatar 
+                            src={colleague.name.startsWith("NEW") ? newNinja_photo : colleague.imagePortraitUrl} 
+                            className="image-small" 
+                            alt="Colleague photograph" 
+                        />
                         <List.Content>
                             <div className="row-name">{ colleague.name }</div>
                             <div className="row-office">Office: { colleague.office }</div>
