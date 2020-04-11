@@ -20,7 +20,7 @@ This command builds the app for production to the `build` folder.<br />
 
 My aim when making this was to create a site that is modern, yet simple and minimalistic.<br />
 I decided to aim for these points:
-
+<p>
 - _design / accessibility
 - [x] Fancy animations (1 pt)
 - [ ] Keyboard only function (1 pt)
@@ -28,7 +28,7 @@ I decided to aim for these points:
 - [ ] No UI framework used (1 pt)
 - [ ] Screen reader function (1 pt)
 - [x] Responsive design (2 pt)
-
+</p><p>
 - _functionality
 - [x] Sort by name and office (1 pt)
 - [x] Filter by name and office (1 pt)
@@ -38,13 +38,13 @@ I decided to aim for these points:
 - [ ] CI/CD pipeline from your repo (1 pt)
 - [ ] Only render a set of profiles (2 pt)
 - [ ] Build your own API (4 pt)
-
+</p><p>
 - _testing/QA
 - [x] Works in Chrome/Firefox/Edge (1 pt)
 - [x] Works in IE11 (1 pt)
 - [ ] End-to-end testing (2 pt)
 - [ ] Unit tests (2 pt)
-
+<p>
 I first thought of not using any UI framework, as well as using by own backend, but came to the conclusion that this would take up too much time.To keep the time around 6 hours, I therefore decided to use some components from Semantic UI and Bootstrap.
 
 ## Thank you for your time!
