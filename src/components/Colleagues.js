@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./styles.css";
-import { Input, Card, Dropdown, List, Image } from "semantic-ui-react";
+import { Input, Card, Dropdown, List, Image, Icon } from "semantic-ui-react";
 import { Modal } from "react-bootstrap";
 import axios from "axios";
 
@@ -8,6 +8,7 @@ import gitHub from "../images/github.png";
 import linkedIn from "../images/linkedin.png";
 import stackOverflow from "../images/stackoverflow.png";
 import twitter from "../images/twitter.png";
+import email from "../images/email.png";
 import grid_active from "../images/grid_active.png";
 import grid_inactive from "../images/grid_inactive.png";
 import row_active from "../images/row_active.png";
@@ -22,6 +23,9 @@ const Colleagues = () => {
     const [socialMedia, setSocialMedia] = useState("All social media");
     const [layout, setLayout] = useState("grid");
     const [showModal, setShowModal] = useState(false);
+    const [sorting, setSorting] = useState("");
+    const [sortedNames, setSortedNames] = useState([]);
+    const [sortedOffices, setSortedOffices] = useState([]);
 
     useEffect( () => {
         // fetch all colleagues by making API call
@@ -29,11 +33,24 @@ const Colleagues = () => {
             .then( res => {
                 setColleagues(res.data);
                 setFiltered(res.data);
+                prepareSortedColleagues(res.data);
             });
     }, []);
 
+    const prepareSortedColleagues = (colleagueData) => {
+        // preparing sorted arrays for possible sorting by user
+        var tempSortedNames = [];
+        var tempSortedOffices = [];
+        colleagueData.forEach(colleague => {
+            tempSortedNames.push(colleague.name);
+            tempSortedOffices.push(colleague.office);
+        });
+        setSortedNames(tempSortedNames.sort());
+        setSortedOffices(tempSortedOffices.sort());
+    }
+
     const filter = (newFilter, newValue) => {
-        // filter colleagues on provided filters
+        // filter colleagues on the provided filter
         let filterName = search;
         let filterOffice = office;
         let filterSocialMedia = socialMedia;
@@ -55,6 +72,7 @@ const Colleagues = () => {
                 colleague[`${filterSocialMedia}`]
             );
         setFiltered(tempFiltered);
+        prepareSortedColleagues(tempFiltered);
     };
 
     const handleSearch = (e) => {
@@ -64,14 +82,34 @@ const Colleagues = () => {
     };
 
     const handleOffice = (e, { value }) => {
+        // filter colleagues by office
         setOffice(value);
         filter("office", value);
-    }
+    };
 
     const handleSocialMedia = (e, { value }) => {
+        // filter colleagues by social media
         setSocialMedia(value);
         filter("social media", value);
-    }
+    };
+
+    const handleSorting = (e, { value }) => {
+        // sorting colleagues on name or office
+        setSorting(value);
+        let tempSorted = filtered;
+        if (value === "name_atoz" || value === "name_ztoa") {
+            tempSorted.sort((a, b) => {  
+                return sortedNames.indexOf(a["name"]) - sortedNames.indexOf(b["name"]);
+            });
+        } else if (value === "office_atoz" || value === "office_ztoa") {
+            tempSorted.sort((a, b) => {  
+                return sortedOffices.indexOf(a["office"]) - sortedOffices.indexOf(b["office"]);
+            });
+        };
+        if (value === "name_ztoa" || value === "office_ztoa")
+            tempSorted.reverse();
+        setFiltered(tempSorted);
+    };
 
     const officeList = [
         // list of offices for filtering
@@ -140,6 +178,34 @@ const Colleagues = () => {
         },
     ];
 
+    const sortingList = [
+        // list of the different sorting options
+        {
+            key: 'Name',
+            text: 'Name',
+            value: 'name_atoz',
+            icon: 'angle down'
+        },
+        {
+            key: 'Name',
+            text: 'Name',
+            value: 'name_ztoa',
+            icon: 'angle up'
+        },
+        {
+            key: 'Office',
+            text: 'Office',
+            value: 'office_atoz',
+            icon: 'angle down'
+        },
+        {
+            key: 'Office',
+            text: 'Office',
+            value: 'office_ztoa',
+            icon: 'angle up'
+        },
+    ];
+
     const renderFilters = () => (
         // render the different filter options
         <>
@@ -163,31 +229,77 @@ const Colleagues = () => {
                     value={socialMedia}
                 />
             </div>
-            <div className="change-layout">
-                { layout==="grid" ?
-                    <>
-                        <img src={grid_active} className="change-layout-icon" alt="Grid layout" />
-                        <img src={row_inactive} className="change-layout-icon" alt="Row layout" onClick={() => setLayout("row")} />
-                    </>
-                :
-                    <>
-                        <img src={grid_inactive} className="change-layout-icon" alt="Grid layout" onClick={() => setLayout("grid")} />
-                        <img src={row_active} className="change-layout-icon" alt="Row layout" />
-                    </>
-                }
+            <div className="dropdown-filters">
+                <div className="sorting-dropdown">
+                    <Icon name='sort' />
+                    <Dropdown
+                        placeholder='Sort by...'
+                        floating
+                        labeled
+                        options={sortingList}
+                        onChange={handleSorting}
+                        value={sorting}
+                        icon={null}
+                    />
+                </div>
+                <div className="change-layout">
+                    { layout==="grid" ?
+                        <>
+                            <img src={grid_active} className="change-layout-icon" alt="Grid layout" />
+                            <img src={row_inactive} className="change-layout-icon" alt="Row layout" onClick={() => setLayout("row")} />
+                        </>
+                    :
+                        <>
+                            <img src={grid_inactive} className="change-layout-icon" alt="Grid layout" onClick={() => setLayout("grid")} />
+                            <img src={row_active} className="change-layout-icon" alt="Row layout" />
+                        </>
+                    }
+                </div>
             </div>
         </>
     );
 
     const clickCard = (index) => {
+        // opening the modal when clicking a card
         setCurrentColleague(index);
         setShowModal(true);
     }
 
+    const renderSocialMediaSymbols = (colleague, view) => (
+        // render the symbols for the colleague's social media
+        <div className={`${view}-symbols`}>
+            { colleague.linkedIn &&
+                <a href={`https://linkedin.com${colleague.linkedIn}`} target="_blank" rel="noopener noreferrer">
+                    <img src={linkedIn} className={`${view}-symbol`} alt="LinkedIn" />
+                </a>
+            }
+            { colleague.gitHub &&
+                <a href={`https://github.com/${colleague.gitHub}`} target="_blank" rel="noopener noreferrer">
+                    <img src={gitHub} className={`${view}-symbol`} alt="GitHub" />
+                </a>
+            }
+            { colleague.twitter &&
+                <a href={`https://twitter.com/${colleague.twitter}`} target="_blank" rel="noopener noreferrer">
+                    <img src={twitter} className={`${view}-symbol`} alt="Twitter" />
+                </a>
+            }
+            { colleague.stackOverflow &&
+                <a href={`https://stackoverflow.com/users/${colleague.stackOverflow}`} target="_blank" rel="noopener noreferrer">
+                    <img src={stackOverflow} className={`${view}-symbol`} alt="StackOverflow" />
+                </a>
+            }
+            { (view === "modal" && colleague.email) &&
+                <a href={`mailto:${colleague.email}`} target="_blank" rel="noopener noreferrer">
+                    <img src={email} className={`${view}-symbol`} alt="Email" />
+                </a>
+            }
+        </div>
+    );
+
     const renderColleagues = () => (
         // render all colleagues
         layout === "grid" ?
-            <Card.Group style={{marginTop: "2%"}}>
+            <Card.Group style={{marginTop: "1%"}}>
                 { filtered.map((colleague, index) => (
                     <Card
                         className="card"
@@ -205,28 +317,7 @@ const Colleagues = () => {
                                     Office: { colleague.office }
                                 </div>
                             </div>
-                            <div className="card-symbols">
-                                { colleague.linkedIn &&
-                                    <a href={`https://linkedin.com${colleague.linkedIn}`} target="_blank" rel="noopener noreferrer">
-                                        <img src={linkedIn} className="card-symbol" alt="LinkedIn" />
-                                    </a>
-                                }
-                                { colleague.gitHub &&
-                                    <a href={`https://github.com/${colleague.gitHub}`} target="_blank" rel="noopener noreferrer">
-                                        <img src={gitHub} className="card-symbol" alt="GitHub" />
-                                    </a>
-                                }
-                                { colleague.twitter &&
-                                    <a href={`https://twitter.com/${colleague.twitter}`} target="_blank" rel="noopener noreferrer">
-                                        <img src={twitter} className="card-symbol" alt="Twitter" />
-                                    </a>
-                                }
-                                { colleague.stackOverflow &&
-                                    <a href={`https://stackoverflow.com/users/${colleague.stackOverflow}`} target="_blank" rel="noopener noreferrer">
-                                        <img src={stackOverflow} className="card-symbol" alt="StackOverflow" />
-                                    </a>
-                                }
-                            </div>
+                            { renderSocialMediaSymbols(colleague, "card") }
                         </Card.Content>
                     </Card>
                 ))}
@@ -242,28 +333,7 @@ const Colleagues = () => {
                             <div className="row-name">{ colleague.name }</div>
                             <div className="row-office">Office: { colleague.office }</div>
                             <List.Description>
-                                <div className="row-symbols">
-                                    { colleague.linkedIn &&
-                                        <a href={`https://linkedin.com${colleague.linkedIn}`} target="_blank" rel="noopener noreferrer">
-                                            <img src={linkedIn} className="row-symbol" alt="LinkedIn" />
-                                        </a>
-                                    }
-                                    { colleague.gitHub &&
-                                        <a href={`https://github.com/${colleague.gitHub}`} target="_blank" rel="noopener noreferrer">
-                                            <img src={gitHub} className="row-symbol" alt="GitHub" />
-                                        </a>
-                                    }
-                                    { colleague.twitter &&
-                                        <a href={`https://twitter.com/${colleague.twitter}`} target="_blank" rel="noopener noreferrer">
-                                            <img src={twitter} className="row-symbol" alt="Twitter" />
-                                        </a>
-                                    }
-                                    { colleague.stackOverflow &&
-                                        <a href={`https://stackoverflow.com/users/${colleague.stackOverflow}`} target="_blank" rel="noopener noreferrer">
-                                            <img src={stackOverflow} className="row-symbol" alt="StackOverflow" />
-                                        </a>
-                                    }
-                                </div>
+                                { renderSocialMediaSymbols(colleague, "row") }
                             </List.Description>
                         </List.Content>
                     </List.Item>
@@ -272,65 +342,43 @@ const Colleagues = () => {
     );
 
     const colleagueInformation = (
+        // render colleague description in the modal
         (filtered && filtered.length > 0) &&
-        <Modal
-            show={showModal}
-            className="modal"
-            onHide={() => setShowModal(false)}
-            onClick={() => setShowModal(false)}
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
-            <div className="modal-text">
-                <div className="colleague-header">
-                    { filtered[currentColleague].name }
+            <Modal
+                show={showModal}
+                className="modal"
+                onHide={() => setShowModal(false)}
+                onClick={() => setShowModal(false)}
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+            >
+                <div className="modal-text">
+                    <div className="colleague-header">
+                        { filtered[currentColleague].name }
+                    </div>
+                    { renderSocialMediaSymbols(filtered[currentColleague], "modal") }
+                    <div 
+                        className="colleague-text" 
+                        dangerouslySetInnerHTML={{
+                            __html: filtered[currentColleague].mainText
+                        }}
+                    />
                 </div>
-                <div className="modal-symbols">
-                    { filtered[currentColleague].linkedIn &&
-                        <a href={`https://linkedin.com${filtered[currentColleague].linkedIn}`} target="_blank" rel="noopener noreferrer">
-                            <img src={linkedIn} className="modal-symbol" alt="LinkedIn" />
-                        </a>
-                    }
-                    { filtered[currentColleague].gitHub &&
-                        <a href={`https://github.com/${filtered[currentColleague].gitHub}`} target="_blank" rel="noopener noreferrer">
-                            <img src={gitHub} className="modal-symbol" alt="GitHub" />
-                        </a>
-                    }
-                    { filtered[currentColleague].twitter &&
-                        <a href={`https://twitter.com/${filtered[currentColleague].twitter}`} target="_blank" rel="noopener noreferrer">
-                            <img src={twitter} className="modal-symbol" alt="Twitter" />
-                        </a>
-                    }
-                    { filtered[currentColleague].stackOverflow &&
-                        <a href={`https://stackoverflow.com/users/${filtered[currentColleague].stackOverflow}`} target="_blank" rel="noopener noreferrer">
-                            <img src={stackOverflow} className="modal-symbol" alt="StackOverflow" />
-                        </a>
-                    }
+                <div className="modal-photo">
+                    <img src={filtered[currentColleague].imageBodyUrl} alt="Large colleague photograph" />
                 </div>
-                <div 
-                    className="colleague-text" 
-                    dangerouslySetInnerHTML={{
-                        __html: filtered[currentColleague].mainText
-                    }}
-                />
-            </div>
-            <div className="modal-photo">
-                <img src={filtered[currentColleague].imageBodyUrl} alt="Large colleague photograph" />
-            </div>
-        </Modal>
+            </Modal>
     );
 
     return (
-        <>
-            <div className="page-container">
-                <div className="header">
-                    The fellowship of the tretton37
-                </div>
-                { renderFilters() }
-                { renderColleagues() }
-                { colleagueInformation }
+        <div className="page-container">
+            <div className="header">
+                The fellowship of the tretton37
             </div>
-        </>
+            { renderFilters() }
+            { renderColleagues() }
+            { colleagueInformation }
+        </div>
     );
 };
 
