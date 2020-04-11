@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./styles.css";
-import { Input, Card, Dropdown } from "semantic-ui-react";
+import { Input, Card, Dropdown, List, Image } from "semantic-ui-react";
 import { Modal } from "react-bootstrap";
 import axios from "axios";
 
@@ -8,6 +8,10 @@ import gitHub from "../images/github.png";
 import linkedIn from "../images/linkedin.png";
 import stackOverflow from "../images/stackoverflow.png";
 import twitter from "../images/twitter.png";
+import grid_active from "../images/grid_active.png";
+import grid_inactive from "../images/grid_inactive.png";
+import row_active from "../images/row_active.png";
+import row_inactive from "../images/row_inactive.png";
 
 const Colleagues = () => {
     const [colleagues, setColleagues] = useState([]);
@@ -16,6 +20,7 @@ const Colleagues = () => {
     const [search, setSearch] = useState("");
     const [office, setOffice] = useState("All offices");
     const [socialMedia, setSocialMedia] = useState("All social media");
+    const [layout, setLayout] = useState("grid");
     const [showModal, setShowModal] = useState(false);
 
     useEffect( () => {
@@ -158,6 +163,19 @@ const Colleagues = () => {
                     value={socialMedia}
                 />
             </div>
+            <div className="change-layout">
+                { layout==="grid" ?
+                    <>
+                        <img src={grid_active} className="change-layout-icon" alt="Grid layout" />
+                        <img src={row_inactive} className="change-layout-icon" alt="Row layout" onClick={() => setLayout("row")} />
+                    </>
+                :
+                    <>
+                        <img src={grid_inactive} className="change-layout-icon" alt="Grid layout" onClick={() => setLayout("grid")} />
+                        <img src={row_active} className="change-layout-icon" alt="Row layout" />
+                    </>
+                }
+            </div>
         </>
     );
 
@@ -167,51 +185,90 @@ const Colleagues = () => {
     }
 
     const renderColleagues = () => (
-        // render all colleagues as cards
-        <Card.Group style={{marginTop: "2%"}}>
-            { filtered.map((colleague, index) => (
-                <Card
-                    className="card"
-                    onClick={event => {event.preventDefault(); clickCard(index)}}
-                >
-                    <Card.Content>
-                        <div className="image-container">
-                            <img src={colleague.imagePortraitUrl} className="image" alt="Colleague photograph" />
-                        </div>
-                        <div className="card-text">
-                            <div>
-                                { colleague.name }
+        // render all colleagues
+        layout === "grid" ?
+            <Card.Group style={{marginTop: "2%"}}>
+                { filtered.map((colleague, index) => (
+                    <Card
+                        className="card"
+                        onClick={() => clickCard(index)}
+                    >
+                        <Card.Content>
+                            <div className="image-container">
+                                <img src={colleague.imagePortraitUrl} className="image" alt="Colleague photograph" />
                             </div>
-                            <div>
-                                Office: { colleague.office }
+                            <div className="card-text">
+                                <div>
+                                    { colleague.name }
+                                </div>
+                                <div>
+                                    Office: { colleague.office }
+                                </div>
                             </div>
-                        </div>
-                        <div className="card-symbols">
-                            { colleague.linkedIn &&
-                                <a href={`https://linkedin.com${colleague.linkedIn}`} target="_blank" rel="noopener noreferrer">
-                                    <img src={linkedIn} className="card-symbol" alt="LinkedIn" />
-                                </a>
-                            }
-                            { colleague.gitHub &&
-                                <a href={`https://github.com/${colleague.gitHub}`} target="_blank" rel="noopener noreferrer">
-                                    <img src={gitHub} className="card-symbol" alt="GitHub" />
-                                </a>
-                            }
-                            { colleague.twitter &&
-                                <a href={`https://twitter.com/${colleague.twitter}`} target="_blank" rel="noopener noreferrer">
-                                    <img src={twitter} className="card-symbol" alt="Twitter" />
-                                </a>
-                            }
-                            { colleague.stackOverflow &&
-                                <a href={`https://stackoverflow.com/users/${colleague.stackOverflow}`} target="_blank" rel="noopener noreferrer">
-                                    <img src={stackOverflow} className="card-symbol" alt="StackOverflow" />
-                                </a>
-                            }
-                        </div>
-                    </Card.Content>
-                </Card>
-            ))}
-        </Card.Group>
+                            <div className="card-symbols">
+                                { colleague.linkedIn &&
+                                    <a href={`https://linkedin.com${colleague.linkedIn}`} target="_blank" rel="noopener noreferrer">
+                                        <img src={linkedIn} className="card-symbol" alt="LinkedIn" />
+                                    </a>
+                                }
+                                { colleague.gitHub &&
+                                    <a href={`https://github.com/${colleague.gitHub}`} target="_blank" rel="noopener noreferrer">
+                                        <img src={gitHub} className="card-symbol" alt="GitHub" />
+                                    </a>
+                                }
+                                { colleague.twitter &&
+                                    <a href={`https://twitter.com/${colleague.twitter}`} target="_blank" rel="noopener noreferrer">
+                                        <img src={twitter} className="card-symbol" alt="Twitter" />
+                                    </a>
+                                }
+                                { colleague.stackOverflow &&
+                                    <a href={`https://stackoverflow.com/users/${colleague.stackOverflow}`} target="_blank" rel="noopener noreferrer">
+                                        <img src={stackOverflow} className="card-symbol" alt="StackOverflow" />
+                                    </a>
+                                }
+                            </div>
+                        </Card.Content>
+                    </Card>
+                ))}
+            </Card.Group>
+        :
+            <List style={{marginTop: "2%"}} selection verticalAlign='middle'>
+                { filtered.map((colleague, index) => (
+                    <List.Item
+                        onClick={() => clickCard(index)}
+                    >
+                        <Image avatar src={colleague.imagePortraitUrl} className="image-small" alt="Colleague photograph" />
+                        <List.Content>
+                            <div className="row-name">{ colleague.name }</div>
+                            <div className="row-office">Office: { colleague.office }</div>
+                            <List.Description>
+                                <div className="row-symbols">
+                                    { colleague.linkedIn &&
+                                        <a href={`https://linkedin.com${colleague.linkedIn}`} target="_blank" rel="noopener noreferrer">
+                                            <img src={linkedIn} className="row-symbol" alt="LinkedIn" />
+                                        </a>
+                                    }
+                                    { colleague.gitHub &&
+                                        <a href={`https://github.com/${colleague.gitHub}`} target="_blank" rel="noopener noreferrer">
+                                            <img src={gitHub} className="row-symbol" alt="GitHub" />
+                                        </a>
+                                    }
+                                    { colleague.twitter &&
+                                        <a href={`https://twitter.com/${colleague.twitter}`} target="_blank" rel="noopener noreferrer">
+                                            <img src={twitter} className="row-symbol" alt="Twitter" />
+                                        </a>
+                                    }
+                                    { colleague.stackOverflow &&
+                                        <a href={`https://stackoverflow.com/users/${colleague.stackOverflow}`} target="_blank" rel="noopener noreferrer">
+                                            <img src={stackOverflow} className="row-symbol" alt="StackOverflow" />
+                                        </a>
+                                    }
+                                </div>
+                            </List.Description>
+                        </List.Content>
+                    </List.Item>
+                ))}
+            </List>
     );
 
     const colleagueInformation = (
