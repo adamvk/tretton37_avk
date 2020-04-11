@@ -82,8 +82,11 @@ const Colleagues = () => {
             tempFiltered = tempFiltered.filter(colleague =>
                 colleague[`${filterSocialMedia}`]
             );
-        setSorting("");
-        setFiltered(tempFiltered);
+        // setSorting("");
+        if (sorting === "")
+            setFiltered(tempFiltered);
+        else
+            applySortingToFiltered(tempFiltered);
         prepareSortedColleagues(tempFiltered);
     };
 
@@ -119,6 +122,22 @@ const Colleagues = () => {
             });
         };
         if (value === "name_ztoa" || value === "office_ztoa")
+            tempSorted.reverse();
+        setFiltered(tempSorted);
+    };
+
+    const applySortingToFiltered = (tempSorted) => {
+        // apply sorting to filtered colleagues
+        if (sorting === "name_atoz" || sorting === "name_ztoa") {
+            tempSorted.sort((a, b) => {  
+                return sortedNames.indexOf(a["name"]) - sortedNames.indexOf(b["name"]);
+            });
+        } else if (sorting === "office_atoz" || sorting === "office_ztoa") {
+            tempSorted.sort((a, b) => {  
+                return sortedOffices.indexOf(a["office"]) - sortedOffices.indexOf(b["office"]);
+            });
+        };
+        if (sorting === "name_ztoa" || sorting === "office_ztoa")
             tempSorted.reverse();
         setFiltered(tempSorted);
     };
