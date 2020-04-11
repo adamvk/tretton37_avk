@@ -82,7 +82,6 @@ const Colleagues = () => {
             tempFiltered = tempFiltered.filter(colleague =>
                 colleague[`${filterSocialMedia}`]
             );
-        // setSorting("");
         if (sorting === "")
             setFiltered(tempFiltered);
         else
