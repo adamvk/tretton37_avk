@@ -1,68 +1,53 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## tretton37 colleagues
 
-## Available Scripts
+This project shows all of the colleagues currently working at tretton37.<br />
 
-In the project directory, you can run:
+## Running the website
+
+The website is available at [http://tretton37avk.herokuapp.com](http://tretton37avk.herokuapp.com).<br />
+It can also be run locally by cloning the project from GitHub, and thereafter running (from the project directory):
 
 ### `npm start`
 
-Runs the app in the development mode.<br />
+This runs the app in the development mode.<br />
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+This command builds the app for production to the `build` folder.<br />
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+## Thoughts behind the website
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+My aim when making this was to create a site that is modern, yet simple and minimalistic.<br />
+I decided to aim for these points:
 
-### `npm run eject`
+- _design / accessibility
+[x] Fancy animations (1 pt)
+[ ] Keyboard only function (1 pt)
+[x] A modern design (1 pt)
+[ ] No UI framework used (1 pt)
+[ ] Screen reader function (1 pt)
+[x] Responsive design (2 pt)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- _functionality
+[x] Sort by name and office (1 pt)
+[x] Filter by name and office (1 pt)
+[x] Filter by contact links (1 pt)
+[x] Enable switch between a grid and a differend view (1 pt)
+[x] Available on a free public url (Heroku) (1 pt)
+[ ] CI/CD pipeline from your repo (1 pt)
+[ ] Only render a set of profiles (2 pt)
+[ ] Build your own API (4 pt)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- _testing/QA
+[x] Works in Chrome/Firefox/Edge (1 pt)
+[x] Works in IE11 (1 pt)
+[ ] End-to-end testing (2 pt)
+[ ] Unit tests (2 pt)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+I first thought of not using any UI framework, as well as using by own backend, but came to the conclusion that this would take up too much time.<br />
+To keep the time around 6 hours, I therefore decided to use some components from Semantic UI and Bootstrap.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Thank you for your time!
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+// Adam von Kraemer

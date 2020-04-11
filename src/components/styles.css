@@ -158,7 +158,6 @@
     flex-direction: row !important;
     padding: 30px;
     width: 800px !important;
-    background-color: blue;
 }
 
 .colleague-header {
@@ -173,12 +172,12 @@
 .modal-symbols {
     position: relative;
     width: 100%;
-    height: 18px;
+    height: 24px;
     display: inline-block;
     margin-bottom: 20px;
 }
 
 .modal-symbol {
-    height: 18px;
-    margin-right: 1.5%;
+    height: 24px;
+    margin-right: 15px;
 }
