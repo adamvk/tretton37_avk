@@ -35,7 +35,7 @@ I decided to aim for these points:
 - [x] Sort by name and office (1 pt)
 - [x] Filter by name and office (1 pt)
 - [x] Filter by contact links (1 pt)
-- [x] Enable switch between a grid and a differend view (1 pt)
+- [x] Enable switch between a grid and a different view (1 pt)
 - [x] Available on a free public url (Heroku) (1 pt)
 - [ ] CI/CD pipeline from your repo (1 pt)
 - [ ] Only render a set of profiles (2 pt)
