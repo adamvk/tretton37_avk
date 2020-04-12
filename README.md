@@ -19,7 +19,8 @@ This command builds the app for production to the `build` folder.<br />
 ## Thoughts behind the website
 
 My aim when making this was to create a site that is modern, yet simple and minimalistic.<br />
-I first thought of not using any UI framework, as well as using by own backend, but came to the conclusion that this would take up too much time.To keep the time around 6 hours, I therefore decided to use some components from Semantic UI and Bootstrap.<br />
+I chose to use ReactJS, as I feel very comfortable with this framework, and as I think it makes it possible to create good-looking and functional websites without having to spend too much time on creating all of the content from scratch.
+Consequently, I first thought of not using any UI framework, as well as using by own backend, but came to the conclusion that this would also take up too much time. To keep it around 6 hours, I therefore decided to use some components from Semantic UI and Bootstrap.<br />
 I decided to aim for these points:
 
 ### _design / accessibility

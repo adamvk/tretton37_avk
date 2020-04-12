@@ -58,6 +58,7 @@ const Colleagues = () => {
         });
         setSortedNames(tempSortedNames.sort());
         setSortedOffices(tempSortedOffices.sort());
+        return [tempSortedNames, tempSortedOffices];
     }
 
     const filter = (newFilter, newValue) => {
@@ -82,11 +83,11 @@ const Colleagues = () => {
             tempFiltered = tempFiltered.filter(colleague =>
                 colleague[`${filterSocialMedia}`]
             );
+        let [tempSortedNames, tempSortedOffices] = prepareSortedColleagues(tempFiltered);
         if (sorting === "")
             setFiltered(tempFiltered);
         else
-            applySortingToFiltered(tempFiltered);
-        prepareSortedColleagues(tempFiltered);
+            applySortingToFiltered(tempFiltered, tempSortedNames, tempSortedOffices);
     };
 
     const handleSearch = (e) => {
@@ -125,15 +126,15 @@ const Colleagues = () => {
         setFiltered(tempSorted);
     };
 
-    const applySortingToFiltered = (tempSorted) => {
+    const applySortingToFiltered = (tempSorted, tempSortedNames, tempSortedOffices) => {
         // apply sorting to filtered colleagues
         if (sorting === "name_atoz" || sorting === "name_ztoa") {
             tempSorted.sort((a, b) => {  
-                return sortedNames.indexOf(a["name"]) - sortedNames.indexOf(b["name"]);
+                return tempSortedNames.indexOf(a["name"]) - tempSortedNames.indexOf(b["name"]);
             });
         } else if (sorting === "office_atoz" || sorting === "office_ztoa") {
             tempSorted.sort((a, b) => {  
-                return sortedOffices.indexOf(a["office"]) - sortedOffices.indexOf(b["office"]);
+                return tempSortedOffices.indexOf(a["office"]) - tempSortedOffices.indexOf(b["office"]);
             });
         };
         if (sorting === "name_ztoa" || sorting === "office_ztoa")
