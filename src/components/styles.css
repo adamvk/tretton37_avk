@@ -1,3 +1,8 @@
+@font-face {
+    font-family: "Baloo Paaji 2";
+    src: url("../fonts/BalooPaaji2.ttf") format("truetype");
+}
+
 .page-container {
     position: relative;
     width: 800px;
@@ -157,8 +162,32 @@
 .modal-content {
     display: flex;
     flex-direction: row !important;
-    padding: 30px;
+    align-items: flex-start !important;
+    padding: 4%;
     width: 800px !important;
+}
+
+.modal-text {
+    width: 80%;
+}
+
+.modal-photo {
+    width: 180px;
+    height: auto;
+    object-fit: contain;
+    top: 0;
+}
+
+@media screen and (max-width: 810px) {
+    .modal-photo {
+        width: 160px;
+    }
+}
+
+@media screen and (max-width: 620px) {
+    .modal-photo {
+        width: 140px;
+    }
 }
 
 .colleague-header {

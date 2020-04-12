@@ -212,25 +212,25 @@ const Colleagues = () => {
     const sortingList = [
         // list of the different sorting options
         {
-            key: 'Name',
+            key: 'Name_AtoZ',
             text: 'Name',
             value: 'name_atoz',
             icon: 'sort alphabet ascending'
         },
         {
-            key: 'Name',
+            key: 'Name_ZtoA',
             text: 'Name',
             value: 'name_ztoa',
             icon: 'sort alphabet descending'
         },
         {
-            key: 'Office',
+            key: 'Office_AtoZ',
             text: 'Office',
             value: 'office_atoz',
             icon: 'sort alphabet ascending'
         },
         {
-            key: 'Office',
+            key: 'Office_ZtoA',
             text: 'Office',
             value: 'office_ztoa',
             icon: 'sort alphabet descending'
@@ -404,9 +404,9 @@ const Colleagues = () => {
                         }}
                     />
                 </div>
-                <div className="modal-photo">
-                    <img src={filtered[currentColleague].imageBodyUrl} alt="Large colleague photograph" />
-                </div>
+                {/* <div> */}
+                    <img className="modal-photo" src={filtered[currentColleague].imageBodyUrl} alt="Large colleague photograph" />
+                {/* </div> */}
             </Modal>
     );
 
